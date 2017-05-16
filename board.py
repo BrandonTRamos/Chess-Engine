@@ -27,6 +27,15 @@ class Board():
     Ffile=[26,36,46,56,66,76,86,96]
     Gfile=[27,37,47,57,67,77,87,97]
     Hfile=[28,38,48,58,68,78,88,98]
+    a1,b1,c1,d1,e1,f2,g1,h1=91,92,93,94,95,96,97,98
+    a2,b2,c2,d2,e2,f2,g2,h2=81,82,83,84,85,86,87,88
+    a3,b3,c3,d3,e3,f3,g3,h3=71,72,73,74,75,76,77,78
+    a4,b4,c4,d4,e4,f4,g4,h4=61,62,63,64,65,66,67,68
+    a5,b5,c5,d5,e5,f5,g5,h5=51,52,53,54,55,56,57,58
+    a6,b6,c6,d6,e6,f6,g6,h6=41,42,43,44,45,46,47,48
+    a7,b7,c7,d7,e7,f7,g7,h7=31,32,33,34,35,36,37,38
+    a8,b8,c8,d8,e8,f8,g8,h8=21,22,23,24,25,26,27,28
+
 
     castleOptions=0
     enpassantSquare=''
@@ -37,33 +46,7 @@ class Board():
         self.FEN=FEN
         self.board=self.parseFEN()
 
-    def initalizeBoard(self):
-        emptyranks=[self.ThirdRank,self.FourthRank,self.FifthRank,self.SixthRank]
-        board=[99 for i in range(120)]
-        for rank in emptyranks:
-            for square in rank:
-                board[square]=0
-        for square in self.SeventhRank:
-            board[square]=self.BlackPawn
-        for square in self.SecondRank:
-            board[square]=self.WhitePawn
-        board[21]=self.BlackRook
-        board[28]=self.BlackRook
-        board[22]=self.BlackKnight
-        board[27]=self.BlackKnight
-        board[23]=self.BlackBishop
-        board[26]=self.BlackBishop
-        board[24]=self.BlackQueen
-        board[25]=self.BlackKing
-        board[91]=self.WhiteRook
-        board[98]=self.WhiteRook
-        board[92]=self.WhiteKnight
-        board[97]=self.WhiteKnight
-        board[93]=self.WhiteBishop
-        board[96]=self.WhiteBishop
-        board[94]=self.WhiteQueen
-        board[95]=self.WhiteKing
-        return board
+
     def printBoard(self):
 
         for i in range(21,101,10):
@@ -71,6 +54,10 @@ class Board():
             for j in range(8):
                line.append(str(self.board[i+j]).rjust(2))
             print(' '.join(line))
+        print('\nSide to move:',self.sideToMove)
+        print('Castle Options: ',bin(self.castleOptions))
+        print('enpassant square:', self.enpassantSquare)
+        print('Fifty-Move Counter:', self.FiftyMove_Counter)
 
     def parseFEN(self):
         castlecount=0
@@ -98,12 +85,12 @@ class Board():
                         board[ranks[rank][square+blank]]=0
                     FEN=FEN[1:]
                     square+=blankcount
+        print('FEN:',FEN)
         if FEN[0]=='w':
             self.sideToMove=0
         else:
             self.sideToMove=1
         FEN=FEN[2:]
-        print(FEN)
         if 'K'in FEN[:4]:
             self.castleOptions=0b0001
             castlecount+=1
@@ -116,17 +103,19 @@ class Board():
         if 'q' in FEN[:4]:
             self.castleOptions=self.castleOptions|0b1000
             castlecount+=1
-        print('Castle Options:',bin(self.castleOptions))
-        print('Castle Count:',castlecount)
         FEN=FEN[castlecount+1:]
         if FEN[0]!='-':
             self.enpassantSquare=FEN[:2]
             FEN=FEN[3:]
         else:
            FEN=FEN[2:]
-        print('EP:',self.enpassantSquare)
-        print(FEN)
-
+        print("FEN:",FEN)
+        movecount=''
+        while FEN[0]!=' ':
+            movecount+=FEN[0]
+            FEN=FEN[1:]
+        FEN=FEN[1:]
+        self.FiftyMove_Counter=int(movecount)
         return board
 
 
