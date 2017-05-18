@@ -11,6 +11,7 @@ class Board():
     WhiteRook=10
     WhiteQueen=11
     WhiteKing=12
+
     FirstRank=[91,92,93,94,95,96,97,98]
     SecondRank=[81,82,83,84,85,86,87,88]
     ThirdRank=[71,72,73,74,75,76,77,78]
@@ -19,6 +20,7 @@ class Board():
     SixthRank=[41,42,43,44,45,46,47,48]
     SeventhRank=[31,32,33,34,35,36,37,38]
     EigthRank=[21,22,23,24,25,26,27,28]
+
     Afile=[21,31,41,51,61,71,81,91]
     Bfile=[22,32,42,52,62,72,82,92]
     Cfile=[23,33,43,53,63,73,83,93]
@@ -27,6 +29,7 @@ class Board():
     Ffile=[26,36,46,56,66,76,86,96]
     Gfile=[27,37,47,57,67,77,87,97]
     Hfile=[28,38,48,58,68,78,88,98]
+
     a1,b1,c1,d1,e1,f1,g1,h1=91,92,93,94,95,96,97,98
     a2,b2,c2,d2,e2,f2,g2,h2=81,82,83,84,85,86,87,88
     a3,b3,c3,d3,e3,f3,g3,h3=71,72,73,74,75,76,77,78
@@ -36,15 +39,26 @@ class Board():
     a7,b7,c7,d7,e7,f7,g7,h7=31,32,33,34,35,36,37,38
     a8,b8,c8,d8,e8,f8,g8,h8=21,22,23,24,25,26,27,28
 
+    legalsquares=[21, 22, 23, 24, 25, 26, 27, 28,
+                  31, 32, 33, 34, 35, 36, 37, 38,
+                  41, 42, 43, 44, 45, 46, 47, 48,
+                  51, 52, 53, 54, 55, 56, 57, 58,
+                  61, 62, 63, 64, 65, 66, 67, 68,
+                  71, 72, 73, 74, 75, 76, 77, 78,
+                  81, 82, 83, 84, 85, 86, 87, 88,
+                  91, 92, 93, 94, 95, 96, 97, 98]
+
 
     castleOptions=0
     enpassantSquare=''
     FiftyMove_Counter=0
 
 
+
     def __init__(self,FEN):
         self.FEN=FEN
         self.board=self.parseFEN()
+        self.middlegame=self.is_middlegame()
 
 
     def printBoard(self):
@@ -117,6 +131,12 @@ class Board():
         FEN=FEN[1:]
         self.FiftyMove_Counter=int(movecount)
         return board
+
+    def is_middlegame(self):
+        if 5 in self.board and 11 in self.board:
+            return True
+        else:
+            return False
 
 
 
