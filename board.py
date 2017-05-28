@@ -1,4 +1,8 @@
 class Board():
+
+    White=0
+    Black=1
+
     BlackPawn=1
     BlackKnight=2
     BlackBishop=3
@@ -11,6 +15,10 @@ class Board():
     WhiteRook=10
     WhiteQueen=11
     WhiteKing=12
+
+
+    whitePieces=[WhitePawn,WhiteKing,WhiteQueen,WhiteRook,WhiteBishop,WhiteKnight]
+    blackPieces=[BlackKing,BlackQueen,BlackRook,BlackBishop,BlackKnight,BlackPawn]
 
     FirstRank=[91,92,93,94,95,96,97,98]
     SecondRank=[81,82,83,84,85,86,87,88]
@@ -59,6 +67,7 @@ class Board():
         self.FEN=FEN
         self.board=self.parseFEN()
         self.middlegame=self.is_middlegame()
+        self.pieceSquares()
 
 
     def printBoard(self):
@@ -138,8 +147,57 @@ class Board():
         else:
             return False
 
+    def pieceSquares(self):
+        self.whitepiecesq=[]
+        self.blackpiecesq=[]
 
 
-
-
-
+        self.blackPawnsq=[]
+        self.whitePawnsq=[]
+        self.blackKnightsq=[]
+        self.whiteKnightsq=[]
+        self.blackBishopsq=[]
+        self.whiteBishopsq=[]
+        self.blackRooksq=[]
+        self.whiteRooksq=[]
+        self.blackQueensq=[]
+        self.whiteQueensq=[]
+        self.blackKingsq=[]
+        self.whiteKingsq=[]
+        for square in self.legalsquares:
+            if self.board[square]==self.BlackPawn:
+                self.blackPawnsq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhitePawn:
+                self.whitePawnsq.append(square)
+                self.whitepiecesq.append(square)
+            elif self.board[square]==self.BlackKnight:
+                self.blackKnightsq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhiteKnight:
+                self.whiteKnightsq.append(square)
+                self.whitepiecesq.append(square)
+            elif self.board[square]==self.BlackBishop:
+                self.blackBishopsq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhiteBishop:
+                self.whiteBishopsq.append(square)
+                self.whitepiecesq.append(square)
+            elif self.board[square]==self.BlackRook:
+                self.blackRooksq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhiteRook:
+                self.whiteRooksq.append(square)
+                self.whitepiecesq.append(square)
+            elif self.board[square]==self.BlackQueen:
+                self.blackQueensq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhiteQueen:
+                self.whiteQueensq.append(square)
+                self.whitepiecesq.append(square)
+            elif self.board[square]==self.BlackKing:
+                self.blackKingsq.append(square)
+                self.blackpiecesq.append(square)
+            elif self.board[square]==self.WhiteQueen:
+                self.whiteKingsq.append(square)
+                self.whitepiecesq.append(square)
