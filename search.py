@@ -7,17 +7,29 @@ class Search():
             for square in board.whiteKnightsq:
                 fromsquare=square
                 for offset in knightoffsets:
-                    move=fromsquare
-                    if board.board[fromsquare-offset]!=99 and fromsquare-offset not in board.whitepiecesq:
-                        move=(move<<7|(fromsquare-offset))
+                    capturedPiece = 0
+                    move = 8
+                    toSquare = fromsquare + offset
+                    if board.board[toSquare]!=99 and toSquare not in board.whitepiecesq:
+                        if board.board[toSquare] in board.blackPieces:
+                            capturedPiece=board.board[toSquare]
+                        move=(move<<7)|fromsquare
+                        move=(move<<7)|toSquare
+                        move=(move<<4)|capturedPiece
                         moves.append(move)
         else:
             for square in board.blackKnightsq:
                 fromsquare=square
                 for offset in knightoffsets:
-                    move=fromsquare
-                    if board.board[fromsquare-offset]!=99 and fromsquare-offset not in board.blackpiecesq:
-                        move=(move<<7|(fromsquare-offset))
+                    capturedPiece = 0
+                    move = 2
+                    toSquare=fromsquare+offset
+                    if board.board[toSquare]!=99 and toSquare not in board.blackpiecesq:
+                        if board.board[toSquare] in board.whitePieces:
+                            capturedPiece=board.board[toSquare]
+                        move=(move<<7)|fromsquare
+                        move=(move<<7)|toSquare
+                        move=(move<<4)|capturedPiece
                         moves.append(move)
         return moves
 
