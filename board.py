@@ -71,7 +71,7 @@ class Board():
 
 
     def printBoard(self):
-
+        print('Board:')
         for i in range(21,101,10):
             line=[]
             for j in range(8):
@@ -81,6 +81,7 @@ class Board():
         print('Castle Options: ',bin(self.castleOptions))
         print('enpassant square:', self.enpassantSquare)
         print('Fifty-Move Counter:', self.FiftyMove_Counter)
+        print('Middle Game:',self.middlegame)
 
     def parseFEN(self):
         castlecount=0
@@ -108,7 +109,6 @@ class Board():
                         board[ranks[rank][square+blank]]=0
                     FEN=FEN[1:]
                     square+=blankcount
-        print('FEN:',FEN)
         if FEN[0]=='w':
             self.sideToMove=0
         else:
@@ -132,7 +132,6 @@ class Board():
             FEN=FEN[3:]
         else:
            FEN=FEN[2:]
-        print("FEN:",FEN)
         movecount=''
         while FEN[0]!=' ':
             movecount+=FEN[0]
@@ -201,3 +200,12 @@ class Board():
             elif self.board[square]==self.WhiteQueen:
                 self.whiteKingsq.append(square)
                 self.whitepiecesq.append(square)
+
+    def makeMove(self,movelist):
+        for move in movelist:
+            capturedPiece=move&15
+            toSquare=(move>>4)&127
+            fromSquare=(move>>11)&127
+            piece=(move>>18)&15
+
+            print('Piece:',piece,'ToSq:',toSquare,'fromsq:',fromSquare,'captured piece:',capturedPiece)
