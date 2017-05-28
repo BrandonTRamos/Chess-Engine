@@ -3,22 +3,14 @@ from evaluate import Evaluate
 from search import Search
 import datetime
 
-myboard=Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+myboard=Board('rnbqkbnr/pppppppp/8/8/8/7r/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
 myboard.printBoard()
 eval=Evaluate()
 search=Search()
 
 whiteknightmoves=search.generateKnightmoves(myboard,myboard.White)
+myboard.makeMove(whiteknightmoves)
 blackknightmoves=search.generateKnightmoves(myboard,myboard.Black)
-
-print("white knight moves:",whiteknightmoves)
-for move in whiteknightmoves:
-    print("from:",(move>>7)&127)
-    print("to:", move & 127)
-print("\nblack knight moves:",blackknightmoves)
-for move in blackknightmoves:
-    print("from:",(move>>7)&127)
-    print("to:", move & 127)
 
 
 
