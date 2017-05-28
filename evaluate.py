@@ -38,14 +38,16 @@ class Evaluate():
                 -40,-20,  0,  5,  5,  0,-20,-40,
                 -50,-40,-30,-30,-30,-30,-40,-50,]
 
-    blackknights=[-50,-40,-30,-30,-30,-30,-40,-50,
-                -40,-20,  0,  0,  0,  0,-20,-40,
-                -30,  0, 10, 15, 15, 10,  0,-30,
-                -30,  5, 15, 20, 20, 15,  5,-30,
-                -30,  0, 15, 20, 20, 15,  0,-30,
-                -30,  5, 10, 15, 15, 10,  5,-30,
-                -40,-20,  0,  5,  5,  0,-20,-40,
-                -50,-40,-30,-30,-30,-30,-40,-50,]
+
+    blackknights=[-50, -40, -30, -30, -30, -30, -40, -50,
+                  -40, -20, 0, 5, 5, 0, -20, -40,
+                  -30, 5, 10, 15, 15, 10, 5, -30,
+                  -30, 0, 15, 20, 20, 15, 0, -30,
+                  -30, 5, 15, 20, 20, 15, 5, -30,
+                  -30, 0, 10, 15, 15, 10, 0, -30,
+                  -40, -20, 0, 0, 0, 0, -20, -40,
+                  -50, -40, -30, -30, -30, -30, -40,-50]
+
 
     whitebishops=[-20,-10,-10,-10,-10,-10,-10,-20,
                 -10,  0,  0,  0,  0,  0,  0,-10,
@@ -148,85 +150,56 @@ class Evaluate():
             i+=1
         return onetwentyto64map
 
+    def pawnScore(self,board):
+        blackPawnscore=0
+        whitePawnscore=0
+        for square in board.blackPawnsq:
+            blackPawnscore+=(100+self.blackpawns[self.onetwentyto64map[square]])
+        for square in board.whitePawnsq:
+            whitePawnscore += (100 + self.whitepawns[self.onetwentyto64map[square]])
+        return whitePawnscore-blackPawnscore
+
+    def knightScore(self,board):
+        blackKnightscore=0
+        whiteKnightscore=0
+        for square in board.blackKnightsq:
+            blackKnightscore += (300 + self.blackknights[self.onetwentyto64map[square]])
+        for square in board.whiteKnightsq:
+            whiteKnightscore += (300 + self.whiteknights[self.onetwentyto64map[square]])
+        return whiteKnightscore - blackKnightscore
+
+    def bishopScore(self,board):
+        blackBishopscore=0
+        whiteBishopscore=0
+        for square in board.blackBishopsq:
+            blackBishopscore += (310 + self.blackbishops[self.onetwentyto64map[square]])
+        for square in board.whiteBishopsq:
+            whiteBishopscore += (310 + self.whitebishops[self.onetwentyto64map[square]])
+        return whiteBishopscore - blackBishopscore
+
+    def rookScore(self,board):
+        blackRookscore=0
+        whiteRookscore=0
+        for square in board.blackRooksq:
+            blackRookscore += (500 + self.blackrooks[self.onetwentyto64map[square]])
+        for square in board.whiteRooksq:
+            whiteRookscore += (500 + self.whiterooks[self.onetwentyto64map[square]])
+        return whiteRookscore - blackRookscore
+
+    def queenScore(self,board):
+        blackQueenscore=0
+        whiteQueenscore=0
+        for square in board.blackQueensq:
+            blackQueenscore += (900 + self.blackqueen[self.onetwentyto64map[square]])
+        for square in board.whiteQueensq:
+            whiteQueenscore += (900 + self.whitequeen[self.onetwentyto64map[square]])
+        return whiteQueenscore - blackQueenscore
+
     def evaluate_node(self,board):
-        whitePieces=[]
-        blackPieces=[]
-
-        blackPawns=[]
-        blackKnights=[]
-        blackBishops=[]
-        blackRooks=[]
-        blackQueen=[]
-        blackKing=[]
-
-        whitePawns=[]
-        whiteKnights=[]
-        whiteBishops=[]
-        whiteRooks=[]
-        whiteQueen=[]
-        whiteKing=[]
-
-        allpieces=[]
-
-        whitescore=0
-        blackscore=0
-        for square in self.legalsquares:
-            if board[square]==1:
-                blackscore+=100
-                blackscore+=self.blackpawns[self.onetwentyto64map[square]]
-                blackPieces.append(square)
-                blackPawns.append(square)
-            elif board[square]==2:
-                blackscore+=300
-                blackscore += self.blackknights[self.onetwentyto64map[square]]
-                blackKnights.append(square)
-                blackPieces.append(square)
-            elif board[square]==3:
-                blackscore+=310
-                blackscore += self.blackbishops[self.onetwentyto64map[square]]
-                blackBishops.append(square)
-                blackPieces.append(square)
-            elif board[square]==4:
-                blackscore+=500
-                blackscore += self.blackrooks[self.onetwentyto64map[square]]
-                blackRooks.append(square)
-                blackPieces.append(square)
-            elif board[square]==5:
-                blackscore+=900
-                blackscore += self.blackqueen[self.onetwentyto64map[square]]
-                blackQueen.append(square)
-                blackPieces.append(square)
-            elif board[square]==6:
-                blackKing.append(square)
-                blackPieces.append(square)
-            elif board[square]==7:
-                whitescore+=100
-                whitescore += self.whitepawns[self.onetwentyto64map[square]]
-                whitePawns.append(square)
-                whitePieces.append(square)
-            elif board[square]==8:
-                whitescore+=300
-                whitescore += self.whiteknights[self.onetwentyto64map[square]]
-                whiteKnights.append(square)
-                whitePieces.append(square)
-            elif board[square]==9:
-                whitescore+=310
-                whitescore += self.whitebishops[self.onetwentyto64map[square]]
-                whiteBishops.append(square)
-                whitePieces.append(square)
-            elif board[square]==10:
-                whitescore+=500
-                whitescore += self.whiterooks[self.onetwentyto64map[square]]
-                whiteRooks.append(square)
-                whitePieces.append(square)
-            elif board[square]==11:
-                whitescore+=900
-                whitescore += self.whitequeen[self.onetwentyto64map[square]]
-                whiteQueen.append(square)
-                whitePieces.append(square)
-
-            elif board[square]==12:
-                whiteKing.append(square)
-                whitePieces.append(square)
-            totalscore=whitescore-blackscore
+        totalscore=0
+        totalscore+=self.pawnScore(board)
+        totalscore+=self.knightScore(board)
+        totalscore+=self.bishopScore(board)
+        totalscore+=self.rookScore(board)
+        totalscore+=self.queenScore(board)
         return totalscore/100
