@@ -60,6 +60,7 @@ class Board():
     castleOptions=0
     enpassantSquare=''
     FiftyMove_Counter=0
+    sideToMove=0
 
 
 
@@ -77,11 +78,11 @@ class Board():
             for j in range(8):
                line.append(str(self.board[i+j]).rjust(2))
             print(' '.join(line))
-        print('\nSide to move:',self.sideToMove)
-        print('Castle Options: ',bin(self.castleOptions))
-        print('enpassant square:', self.enpassantSquare)
-        print('Fifty-Move Counter:', self.FiftyMove_Counter)
-        print('Middle Game:',self.middlegame)
+        # print('\nSide to move:',self.sideToMove)
+        # print('Castle Options: ',bin(self.castleOptions))
+        # print('enpassant square:', self.enpassantSquare)
+        # print('Fifty-Move Counter:', self.FiftyMove_Counter)
+        # print('Middle Game:',self.middlegame)
 
     def parseFEN(self):
         castlecount=0
@@ -197,15 +198,111 @@ class Board():
             elif self.board[square]==self.BlackKing:
                 self.blackKingsq.append(square)
                 self.blackpiecesq.append(square)
-            elif self.board[square]==self.WhiteQueen:
+            elif self.board[square]==self.WhiteKing:
                 self.whiteKingsq.append(square)
                 self.whitepiecesq.append(square)
 
-    def makeMove(self,movelist):
-        for move in movelist:
-            capturedPiece=move&15
-            toSquare=(move>>4)&127
-            fromSquare=(move>>11)&127
-            piece=(move>>18)&15
+    def makeMove(self,move):
+        capturedPiece=move&15
+        toSquare=(move>>4)&127
+        fromSquare=(move>>11)&127
+        piece=(move>>18)&15
+        print('From:',fromSquare,"to:",toSquare,'captured:',capturedPiece)
+        self.board[fromSquare]=0
+        self.board[toSquare]=piece
+        if piece==self.WhiteKnight:
+            self.whiteKnightsq.remove(fromSquare)
+            self.whiteKnightsq.append(toSquare)
+            self.whitepiecesq.remove(fromSquare)
+            self.whitepiecesq.append(toSquare)
+            if capturedPiece==2:
+                self.blackKnightsq.remove(toSquare)
+                self.blackpiecesq.remove(toSquare)
+            elif capturedPiece==4:
+                self.blackRooksq.remove(toSquare)
+                self.blackpiecesq.remove(toSquare)
+            elif capturedPiece == 3:
+                self.blackBishopsq.remove(toSquare)
+                self.blackpiecesq.remove(toSquare)
+            elif capturedPiece == 5:
+                self.blackQueensq.remove(toSquare)
+                self.blackpiecesq.remove(toSquare)
+            elif capturedPiece == 1:
+                self.blackPawnsq.remove(toSquare)
+                self.blackpiecesq.remove(toSquare)
 
-            print('Piece:',piece,'ToSq:',toSquare,'fromsq:',fromSquare,'captured piece:',capturedPiece)
+        elif piece==self.BlackKnight:
+            self.blackKnightsq.remove(fromSquare)
+            self.blackKnightsq.append(toSquare)
+            self.blackpiecesq.remove(fromSquare)
+            self.blackpiecesq.append(toSquare)
+            if capturedPiece==8:
+                self.whiteKnightsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece==10:
+                self.whiteRooksq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == 9:
+                self.whiteBishopsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == 7:
+                self.whitePawnsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == 11:
+                self.whiteQueensq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+
+
+
+    def unmakeMove(self,move):
+        print('Side to move in unmake move:',self.sideToMove)
+        capturedPiece=move&15
+        toSquare=(move>>4)&127
+        fromSquare=(move>>11)&127
+        piece=(move>>18)&15
+        print('From:', fromSquare, "to:", toSquare, 'captured:', capturedPiece)
+        self.board[fromSquare]=piece
+        self.board[toSquare]=capturedPiece
+        if piece==self.WhiteKnight:
+            self.whiteKnightsq.remove(toSquare)
+            self.whiteKnightsq.append(fromSquare)
+            self.whitepiecesq.remove(toSquare)
+            self.whitepiecesq.append(fromSquare)
+            if capturedPiece==2:
+                self.blackKnightsq.append(toSquare)
+                self.blackpiecesq.append(toSquare)
+            elif capturedPiece == 1:
+                self.blackPawnsq.append(toSquare)
+                self.blackpiecesq.append(toSquare)
+            elif capturedPiece == 3:
+                self.blackBishopsq.append(toSquare)
+                self.blackpiecesq.append(toSquare)
+            elif capturedPiece == 4:
+                self.blackRooksq.append(toSquare)
+                self.blackpiecesq.append(toSquare)
+            elif capturedPiece == 5:
+                self.blackRooksq.append(toSquare)
+                self.blackpiecesq.append(toSquare)
+
+            #add other black pieces
+        elif piece==self.BlackKnight:
+            self.blackKnightsq.remove(toSquare)
+            self.blackKnightsq.append(fromSquare)
+            self.blackpiecesq.remove(toSquare)
+            self.blackpiecesq.append(fromSquare)
+            if capturedPiece==8:
+                self.whiteKnightsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == 7:
+                self.whitePawnsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == 9:
+                self.whiteBihopsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == 10:
+                self.whiteRooksq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == 11:
+                self.whiteQueensq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            #add other white pieces
