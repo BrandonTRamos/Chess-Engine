@@ -195,7 +195,7 @@ class Evaluate():
             whiteQueenscore += (900 + self.whitequeen[self.onetwentyto64map[square]])
         return whiteQueenscore - blackQueenscore
 
-    def evaluate_node(self,board):
+    def evaluate_node(self,board): #board object
         totalscore=0
         totalscore+=self.pawnScore(board)
         totalscore+=self.knightScore(board)
