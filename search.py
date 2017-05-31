@@ -10,7 +10,7 @@ class Search():
                     capturedPiece = 0
                     move = 8
                     toSquare = fromsquare + offset
-                    if board.board[toSquare]!=board.OffBoard and board.board[toSquare]!=board.BlackKing  and toSquare not in board.whitepiecesq:
+                    if board.board[toSquare]!=board.OffBoard and board.board[toSquare]!=board.BlackKing and toSquare not in board.whitepiecesq:
                         if board.board[toSquare] in board.blackPieces:
                             capturedPiece=board.board[toSquare]
                         move=(move<<7)|fromsquare
@@ -44,6 +44,7 @@ class Search():
             return line
         else:
             return bestline
+
     def get_min(self,line,bestline):
         if line[0]<bestline[0]:
             return line
