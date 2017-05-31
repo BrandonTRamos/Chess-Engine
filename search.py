@@ -52,14 +52,12 @@ class Search():
             return bestline
 
 
-    def mini_max(self,board,evaluate,side,depth,movelist):
+    def mini_max(self,board,evaluate,side,depth,movelist,alpha,beta):
         board.sideToMove=side
         print('____________________________________________________')
         print('\nside to move',board.sideToMove)
         if depth==0:
-            moves=[]
-            for i in movelist:
-                moves+=[i]
+            moves=movelist[:]
             print('Max depth reached, evaluation:',evaluate.evaluate_node(board))
             print('Result:',(evaluate.evaluate_node(board),moves))
             print('________________________________________________')
@@ -67,7 +65,7 @@ class Search():
             return (evaluate.evaluate_node(board),moves)
 
         elif side==board.White:
-            bestLine=(-1000,[])
+            maxbestLine=(-1000,[])
             whitemoves=self.generateKnightmoves(board,board.White)
             for move in whitemoves:
                 movelist.append(move)
@@ -75,16 +73,19 @@ class Search():
                 # print('white making @ depth:',depth,'Move:',move)
                 board.makeMove(move)
                 board.printBoard()
-                line=self.mini_max(board,evaluate,board.Black,depth-1,movelist)
+                line=self.mini_max(board,evaluate,board.Black,depth-1,movelist,alpha,beta)
                 # print('whiteunmaking @ depth:',depth,'Move:',move)
-                bestLine = self.get_max(line,bestLine)
+                maxbestLine = self.get_max(line,maxbestLine)
                 board.unmakeMove(move)
-                movelist.remove(move)
-            return bestLine
+                movelist.pop()
+                alpha = max(alpha, maxbestLine[0])
+                if alpha >=beta:
+                    break
+            return maxbestLine
 
 
         else:
-            bestLine=(1000,[])
+            minbestLine=(1000,[])
             blackmoves=self.generateKnightmoves(board,board.Black)
             for move in blackmoves:
                 movelist.append(move)
@@ -92,10 +93,13 @@ class Search():
                 # print('black making @ depth:', depth,'Move:',move)
                 board.makeMove(move)
                 board.printBoard()
-                line=self.mini_max(board,evaluate,board.White,depth-1,movelist)
+                line=self.mini_max(board,evaluate,board.White,depth-1,movelist,alpha,beta)
                 # print('black unmaking @ depth:', depth,'Move:',move)
-                bestLine = self.get_min(line,bestLine)
+                minbestLine = self.get_min(line,minbestLine)
                 board.unmakeMove(move)
-                movelist.remove(move)
-            return bestLine
+                movelist.pop()
+                beta=min(beta,minbestLine[0])
+                if beta<=alpha:
+                    break
+            return minbestLine
 
