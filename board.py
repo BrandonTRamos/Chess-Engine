@@ -73,11 +73,13 @@ class Board():
 
 
     def printBoard(self):
+        piecemap={0:'-',1:'♟',2:'♞',3:'♝',4:'♜',5:'♛',6:'♚',
+                  7:'♙',8:'♘',9:'♗',10:'♖',11:'♕',12:'♔'}
         print('Board:')
         for i in range(21,101,10):
             line=[]
             for j in range(8):
-               line.append(str(self.board[i+j]).rjust(2))
+               line.append(piecemap[self.board[i+j]].rjust(2))
             print(' '.join(line))
         # print('\nSide to move:',self.sideToMove)
         # print('Castle Options: ',bin(self.castleOptions))
