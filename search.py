@@ -13,8 +13,10 @@ class Search():
             offset = 11
         elif abs(square-kingsquare) % 10== 0:
             offset = 10
-        elif abs(square-kingsquare) <8:
+        elif int(kingsquare/10)==int(square/10):
             offset=1
+        print('Kingsquare:',kingsquare,'Square',square)
+        print('Offset: ',offset)
         if offset==0:
             return False
         checksquare=square
