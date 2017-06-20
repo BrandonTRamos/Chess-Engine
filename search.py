@@ -1,66 +1,56 @@
 class Search():
     nodes=0
 
-    def reveals_Kingattack(self,board,move):
+    def is_pinned(self,board,square):
         offset =0
-        fromSquare = (move >> 11) & 127
-        #white
         if board.sideToMove==board.White:
-            kingsquare=board.whiteKingsq
+            kingsquare=board.whiteKingsq[0]
         else:
-            kingsquare = board.blackKingsq
-
-        if abs(fromSquare-kingsquare)%9==0:
+            kingsquare = board.blackKingsq[0]
+        if abs(square-kingsquare)%9==0:
             offset =9
-        elif abs(fromSquare - kingsquare) % 11 == 0:
+        elif abs(square-kingsquare) % 11 == 0:
             offset = 11
-        elif abs(fromSquare - kingsquare) % 10== 0:
+        elif abs(square-kingsquare) % 10== 0:
             offset = 10
-        elif abs(fromSquare - kingsquare) % 1 == 0:
+        elif abs(square-kingsquare) <8:
             offset=1
         if offset==0:
             return False
-        if offset==11 or offset == 9:
-            if fromSquare-kingsquare<0:
-                checksqaure=kingsquare
-                while board.board[checksqaure]!= board.OffBoard:
-                    checksqaure-=offset
-                    if checksqaure==fromSquare:
-                        pass
-                    elif board.sideToMove==board.White:
-                        if board.board[checksqaure]==board.BlackBishop or board.board[checksqaure]==board.BlackQueen:
-                            return True
-                        elif board.board[checksqaure] in board.whitePieces or board.board[checksqaure] in board.blackPieces:
-                            return False
-                    elif board.sideToMove==board.Black:
-                        if board.board[checksqaure]==board.WhiteBishop or board.board[checksqaure]==board.WhiteQueen:
-                            return True
-                        elif board.board[checksqaure] in board.whitePieces or board.board[checksqaure] in board.blackPieces:
-                            return False
+        checksquare=square
+        while checksquare!=kingsquare:
+            if square - kingsquare < 0:
+                checksquare+=offset
             else:
-                checksqaure=kingsquare
-                while board.board[checksqaure]!= board.OffBoard:
-                    checksqaure+=offset
-                    if checksqaure==fromSquare:
-                        pass
-                    elif board.sideToMove==board.White:
-                        if board.board[checksqaure]==board.BlackBishop or board.board[checksqaure]==board.BlackQueen:
-                            return True
-                        elif board.board[checksqaure] in board.whitePieces or board.board[checksqaure] in board.blackPieces:
-                            return False
-                    elif board.sideToMove==board.Black:
-                        if board.board[checksqaure]==board.WhiteBishop or board.board[checksqaure]==board.WhiteQueen:
-                            return True
-                        elif board.board[checksqaure] in board.whitePieces or board.board[checksqaure] in board.blackPieces:
-                            return False
-
-
-        if offset == 10 or offset==1:
-            #fill in code
-            pass
-    #fill black
-
-
+                checksquare-=offset
+            if checksquare in board.blackKingsq or checksquare in board.whiteKingsq:
+                continue
+            elif checksquare in board.whitepiecesq or checksquare in board.blackpiecesq:
+                return False
+        checksquare=square
+        while checksquare!=kingsquare:
+            if square - kingsquare < 0:
+                checksquare-=offset
+            else:
+                checksquare+=offset
+            if board.sideToMove==board.White:
+                if offset == 11 or offset == 9:
+                    if checksquare in board.blackQueensq or checksquare in board.blackBishopsq:
+                        return True
+                elif offset!=0:
+                    if checksquare in board.blackQueensq or checksquare in board.blackRooksq:
+                        return True
+                if checksquare in board.blackpiecesq or checksquare in board.whitepiecesq:
+                    return False
+            elif board.sideToMove==board.Black:
+                if offset == 11 or offset == 9:
+                    if checksquare in board.whiteQueensq or checksquare in board.whiteBishopsq:
+                        return True
+                elif offset!=0:
+                    if checksquare in board.whiteQueensq or checksquare in board.whiteRooksq:
+                        return True
+                if checksquare in board.blackpiecesq or checksquare in board.whitepiecesq:
+                    return False
 
     def generateKnightmoves(self,board,side):
         knightoffsets=[8,12,19,21,-8,-12,-19,-21]
