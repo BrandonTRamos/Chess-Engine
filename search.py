@@ -15,8 +15,6 @@ class Search():
             offset = 10
         elif int(kingsquare/10)==int(square/10):
             offset=1
-        print('Kingsquare:',kingsquare,'Square',square)
-        print('Offset: ',offset)
         if offset==0:
             return False
         checksquare=square
@@ -30,7 +28,7 @@ class Search():
             elif checksquare in board.whitepiecesq or checksquare in board.blackpiecesq:
                 return False
         checksquare=square
-        while checksquare!=kingsquare:
+        while board.board[checksquare]!=board.OffBoard:
             if square - kingsquare < 0:
                 checksquare-=offset
             else:
@@ -44,6 +42,8 @@ class Search():
                         return True
                 if checksquare in board.blackpiecesq or checksquare in board.whitepiecesq:
                     return False
+                if board.board[checksquare] != board.OffBoard:
+                    return False
             elif board.sideToMove==board.Black:
                 if offset == 11 or offset == 9:
                     if checksquare in board.whiteQueensq or checksquare in board.whiteBishopsq:
@@ -52,6 +52,8 @@ class Search():
                     if checksquare in board.whiteQueensq or checksquare in board.whiteRooksq:
                         return True
                 if checksquare in board.blackpiecesq or checksquare in board.whitepiecesq:
+                    return False
+                if board.board[checksquare] != board.OffBoard:
                     return False
 
     def generateKnightmoves(self,board,side):
