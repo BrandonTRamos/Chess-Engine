@@ -56,6 +56,78 @@ class Search():
                 if board.board[checksquare] != board.OffBoard:
                     return False
 
+    def generatePawnmoves(self,board,side):
+        moves=[]
+        if side==board.White:
+            for square in board.whitePawnsq:
+                if self.is_pinned(board,square):
+
+                    pass
+                else:
+                    singleSqauremove=square-10
+                    doubleSquaremove=square-20
+                    capturedPiece=0
+                    pawnAttacksquares=[square-11,square-9]
+                    for attacksquare in pawnAttacksquares:
+                        move = 7
+                        if board.board[attacksquare]!=board.OffBoard and board.board[attacksquare]!=board.BlackKing and (attacksquare) not in board.whitepiecesq:
+                            if (attacksquare) in board.blackpiecesq or attacksquare==board.enpassantSquare:
+                                capturedPiece = board.board[attacksquare]
+                                move = (move << 7) | square
+                                move = (move << 7) | attacksquare
+                                move = (move << 4) | capturedPiece
+                                moves.append(move)
+                    if board.board[singleSqauremove]==0:
+                        capturedPiece = 0
+                        move = 7
+                        move = (move << 7) | square
+                        move = (move << 7) | singleSqauremove
+                        move = (move << 4) | capturedPiece
+                        moves.append(move)
+                        if square in board.SecondRank:
+                            if board.board[doubleSquaremove] == 0:
+                                move = 7
+                                move = (move << 7) | square
+                                move = (move << 7) | doubleSquaremove
+                                move = (move << 4) | capturedPiece
+                                moves.append(move)
+            return moves
+
+        else:
+            for square in board.blackPawnsq:
+                if self.is_pinned(board,square):
+                    pass
+                else:
+                    singleSqauremove = square + 10
+                    doubleSquaremove = square + 20
+                    capturedPiece = 0
+                    pawnAttacksquares = [square + 11, square + 9]
+                    for attacksquare in pawnAttacksquares:
+                        move = 1
+                        if board.board[attacksquare] != board.OffBoard and board.board[attacksquare] != board.WhiteKing and (attacksquare) not in board.blackpiecesq:
+                            if (attacksquare) in board.whitepiecesq or attacksquare == board.enpassantSquare:
+                                capturedPiece = board.board[attacksquare]
+                                move = (move << 7) | square
+                                move = (move << 7) | attacksquare
+                                move = (move << 4) | capturedPiece
+                                moves.append(move)
+                    if board.board[singleSqauremove] == 0:
+                        move = 1
+                        capturedPiece = 0
+                        move = (move << 7) | square
+                        move = (move << 7) | singleSqauremove
+                        move = (move << 4) | capturedPiece
+                        moves.append(move)
+                        if square in board.SeventhRank:
+                            if board.board[doubleSquaremove] == 0:
+                                move = 1
+                                move = (move << 7) | square
+                                move = (move << 7) | doubleSquaremove
+                                move = (move << 4) | capturedPiece
+                                moves.append(move)
+            return moves
+
+
     def generateKnightmoves(self,board,side):
         knightoffsets=[-8,-12,-19,-21,8,12,19,21]
         moves=[]
@@ -162,34 +234,6 @@ class Search():
                     break
             return minbestLine
 
-    def moves_toString(self, movelist):
-        movenumber=1
-        line=''
-        piecemap={1:'',2:'N',3:'B',4:'N',5:'Q',6:'K',
-                  7:'',8:'N',9:'B',10:'R',11:'Q',12:'K'}
-        legalsquaresmap =  {21:'a8', 22:'b8', 23:'c8', 24:'d8', 25:'e8', 26:'f8', 27:'g8', 28:'h8',
-                            31:'a7', 32:'b7', 33:'c7', 34:'d7', 35:'e7', 36:'f7', 37:'g7', 38:'h7',
-                            41:'a6', 42:'b6', 43:'c6', 44:'d6', 45:'e6', 46:'f6', 47:'g6', 48:'h6',
-                            51:'a5', 52:'b5', 53:'c5', 54:'d5', 55:'e5', 56:'f5', 57:'g5', 58:'h5',
-                            61:'a4', 62:'b4', 63:'c4', 64:'d4', 65:'e4', 66:'f4', 67:'g4', 68:'h4',
-                            71:'a3', 72:'b3', 73:'c3', 74:'d3', 75:'e3', 76:'f3', 77:'g3', 78:'h3',
-                            81:'a2', 82:'b2', 83:'c2', 84:'d2', 85:'e2', 86:'f2', 87:'g2', 88:'h2',
-                            91:'a1', 92:'b1', 93:'c1', 94:'d1', 95:'e1', 96:'f1', 97:'g1', 98:'h1'}
-        for move in movelist:
-            capturedPiece=move&15
-            toSquare=(move>>4)&127
-            fromSquare=(move>>11)&127
-            piece=(move>>18)&15
-            line+=' '
-            if movenumber==int(movenumber):
-                line+=(str(int(movenumber))+'.')
-            line+=piecemap[piece]
-            if capturedPiece!=0:
-                line+='x'
-            line+=legalsquaresmap[toSquare]
-            movenumber+=.5
-
-        return line
 
 
 
