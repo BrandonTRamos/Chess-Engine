@@ -32,7 +32,7 @@ def moves_toString(movelist):
 
     return line
 
-myboard=Board('rnbqkbnr/2p1p1pp/8/1p1p1p2/p1P1P3/1P6/P2P1PPP/RNBQKBNR w KQkq - 0 1')
+myboard=Board('rnbqkbnr/2p1p1pp/8/1p1p1p2/p1P1P3/1P6/P2P1PPP/RNBQKBNR b KQkq - 0 1')
 eval=Evaluate()
 search=Search()
 myboard.printBoard()
@@ -45,8 +45,8 @@ for move in search.generatePawnmoves(myboard,myboard.sideToMove):
     print("make",piece, fromSquare,toSquare,capturedPiece)
     myboard.printBoard()
     myboard.unmakeMove(move)
-    print("unmake")
     myboard.printBoard()
+
 
 
 
