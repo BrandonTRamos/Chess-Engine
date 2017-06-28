@@ -56,9 +56,9 @@ class Search():
                 if board.board[checksquare] != board.OffBoard:
                     return False
 
-    def generatePawnmoves(self,board,side):
+    def generatePawnmoves(self,board):
         moves=[]
-        if side==board.White:
+        if board.sideToMove==board.White:
             for square in board.whitePawnsq:
                 if self.is_pinned(board,square):
 
@@ -71,27 +71,27 @@ class Search():
                     for attacksquare in pawnAttacksquares:
                         move = 7
                         if board.board[attacksquare]!=board.OffBoard and board.board[attacksquare]!=board.BlackKing and (attacksquare) not in board.whitepiecesq:
-                            if (attacksquare) in board.blackpiecesq or attacksquare==board.enpassantSquare:
+                            if (attacksquare) in board.blackpiecesq: #or attacksquare==board.enpassantSquare:
                                 capturedPiece = board.board[attacksquare]
                                 move = (move << 7) | square
                                 move = (move << 7) | attacksquare
                                 move = (move << 4) | capturedPiece
-                                moves.append(move)
+                                self.moves.append(move)
                     if board.board[singleSqauremove]==0:
                         capturedPiece = 0
                         move = 7
                         move = (move << 7) | square
                         move = (move << 7) | singleSqauremove
                         move = (move << 4) | capturedPiece
-                        moves.append(move)
+                        self.moves.append(move)
                         if square in board.SecondRank:
                             if board.board[doubleSquaremove] == 0:
                                 move = 7
                                 move = (move << 7) | square
                                 move = (move << 7) | doubleSquaremove
                                 move = (move << 4) | capturedPiece
-                                moves.append(move)
-            return moves
+                                self.moves.append(move)
+
 
         else:
             for square in board.blackPawnsq:
@@ -105,33 +105,33 @@ class Search():
                     for attacksquare in pawnAttacksquares:
                         move = 1
                         if board.board[attacksquare] != board.OffBoard and board.board[attacksquare] != board.WhiteKing and (attacksquare) not in board.blackpiecesq:
-                            if (attacksquare) in board.whitepiecesq or attacksquare == board.enpassantSquare:
+                            if (attacksquare) in board.whitepiecesq: #or attacksquare == board.enpassantSquare:
                                 capturedPiece = board.board[attacksquare]
                                 move = (move << 7) | square
                                 move = (move << 7) | attacksquare
                                 move = (move << 4) | capturedPiece
-                                moves.append(move)
+                                self.moves.append(move)
                     if board.board[singleSqauremove] == 0:
                         move = 1
                         capturedPiece = 0
                         move = (move << 7) | square
                         move = (move << 7) | singleSqauremove
                         move = (move << 4) | capturedPiece
-                        moves.append(move)
+                        self.moves.append(move)
                         if square in board.SeventhRank:
                             if board.board[doubleSquaremove] == 0:
                                 move = 1
                                 move = (move << 7) | square
                                 move = (move << 7) | doubleSquaremove
                                 move = (move << 4) | capturedPiece
-                                moves.append(move)
-            return moves
+                                self.moves.append(move)
 
 
-    def generateKnightmoves(self,board,side):
+
+    def generateKnightmoves(self,board):
         knightoffsets=[-8,-12,-19,-21,8,12,19,21]
         moves=[]
-        if side==board.White:
+        if board.sideToMove==board.White:
             for square in board.whiteKnightsq:
                 if self.is_pinned(board,square):
                     pass
@@ -147,8 +147,8 @@ class Search():
                             move=(move<<7)|fromsquare
                             move=(move<<7)|toSquare
                             move=(move<<4)|capturedPiece
-                            moves.append(move)
-            return moves
+                            self.moves.append(move)
+
         else:
             knightoffsets = [8, 12, 19, 21, -8, -12, -19, -21]
             for square in board.blackKnightsq:
@@ -166,9 +166,12 @@ class Search():
                             move=(move<<7)|fromsquare
                             move=(move<<7)|toSquare
                             move=(move<<4)|capturedPiece
-                            moves.append(move)
+                            self.moves.append(move)
 
-            return moves
+    def generateMoves(self,board):
+        self.moves=[]
+        self.generatePawnmoves(board)
+        self.generateKnightmoves(board)
 
     def get_max(self,line,bestline):
         if line[0]>bestline[0]:
@@ -197,8 +200,8 @@ class Search():
 
         elif side==board.White:
             maxbestLine=(-1000,[])
-            whitemoves=self.generateKnightmoves(board,board.White)
-            for move in whitemoves:
+            self.generateMoves(board)
+            for move in self.moves:
                 movelist.append(move)
                 # print('whitemoves @ depth',depth,':',whitemoves)
                 # print('white making @ depth:',depth,'Move:',move)
@@ -217,8 +220,8 @@ class Search():
 
         else:
             minbestLine=(1000,[])
-            blackmoves=self.generateKnightmoves(board,board.Black)
-            for move in blackmoves:
+            self.generateMoves(board)
+            for move in self.moves:
                 movelist.append(move)
                 # print('blackmoves:',blackmoves)
                 # print('black making @ depth:', depth,'Move:',move)
