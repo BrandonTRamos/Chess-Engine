@@ -1,6 +1,6 @@
 class Board():
 
-    algebraicToInt = {'e6':21}
+    algebraicToInt = {'e6':45}
 
     White=0
     Black=1
@@ -235,6 +235,30 @@ class Board():
             elif capturedPiece == self.BlackPawn:
                 self.blackPawnsq.remove(toSquare)
                 self.blackpiecesq.remove(toSquare)
+
+        elif piece==self.BlackPawn:
+            self.blackPawnsq.remove(fromSquare)
+            self.blackPawnsq.append(toSquare)
+            self.blackpiecesq.remove(fromSquare)
+            self.blackpiecesq.append(toSquare)
+            if capturedPiece==self.WhiteKnight:
+                self.whiteKnightsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece==self.WhiteRook:
+                self.whiteRooksq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == self.WhiteBishop:
+                self.whiteBishopsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == self.WhitePawn:
+                self.whitePawnsq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+            elif capturedPiece == self.WhiteQueen:
+                self.whiteQueensq.remove(toSquare)
+                self.whitepiecesq.remove(toSquare)
+
+
+
         elif piece==self.WhiteKnight:
             self.whiteKnightsq.remove(fromSquare)
             self.whiteKnightsq.append(toSquare)
@@ -330,7 +354,7 @@ class Board():
                 self.blackQueensq.append(toSquare)
                 self.blackpiecesq.append(toSquare)
 
-            #add other black pieces
+
         elif piece==self.BlackKnight:
             self.blackKnightsq.remove(toSquare)
             self.blackKnightsq.append(fromSquare)
@@ -351,4 +375,24 @@ class Board():
             elif capturedPiece == self.WhiteQueen:
                 self.whiteQueensq.append(toSquare)
                 self.whitepiecesq.append(toSquare)
-            #add other white pieces
+
+        elif piece==self.BlackPawn:
+            self.blackPawnsq.remove(toSquare)
+            self.blackPawnsq.append(fromSquare)
+            self.blackpiecesq.remove(toSquare)
+            self.blackpiecesq.append(fromSquare)
+            if capturedPiece==self.WhiteKnight:
+                self.whiteKnightsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == self.WhitePawn:
+                self.whitePawnsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == self.WhiteBishop:
+                self.whiteBishopsq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == self.WhiteRook:
+                self.whiteRooksq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
+            elif capturedPiece == self.WhiteQueen:
+                self.whiteQueensq.append(toSquare)
+                self.whitepiecesq.append(toSquare)
